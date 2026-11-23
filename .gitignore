@@ -1,8 +1,8 @@
-.DS_Store
-.vscode/
-.idea/
+# Ignore large simulation trace outputs and compiled artifacts
+*.xml
+*.pcap
+*.tr
+*.o
+*.so
 __pycache__/
-*.pyc
-build/
-cmake-cache/
-*.dSYM/
+backup-*/

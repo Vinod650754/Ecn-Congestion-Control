@@ -1,4 +1,3 @@
-
 #include "ns3/applications-module.h"
 #include "ns3/core-module.h"
 #include "ns3/flow-monitor-module.h"
@@ -12,16 +11,15 @@
 #include "ecn-monitor.h"
 #include "traffic-generator.h"
 #include "vbr-generator.h"
-#include <fstream>
 #include <iomanip>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <string>
+
 using namespace ns3;
 using namespace ecn;
 using namespace std;
-
-static ofstream g_cwndFiles[3];
 
 static void QueueEnqueueTrace(Ptr<const QueueDiscItem> item)
 {
@@ -33,87 +31,134 @@ static void QueueMarkTrace(Ptr<const QueueDiscItem> item, const char* reason)
     EcnMonitor::OnMark(item, reason);
 }
 
-static void CwndTrace(uint32_t flowId, uint32_t oldCwnd, uint32_t newCwnd)
+static void TcpEcnStateTrace(TcpSocketState::EcnState_t oldState,
+                             TcpSocketState::EcnState_t newState)
 {
-    if (flowId < 1 || flowId > 3)
-    {
-        return;
-    }
-    ofstream& file = g_cwndFiles[flowId - 1];
-    if (!file.is_open())
-    {
-        return;
-    }
-    file << fixed << setprecision(8) << Simulator::Now().GetSeconds() << "," << oldCwnd << "," << newCwnd << "\n";
-    file.flush();
+    EcnMonitor::RecordEcnFeedback(oldState, newState, Simulator::Now().GetSeconds());
 }
 
-static void ConnectCwndTraces()
+static void ConnectTcpEcnTraces()
 {
-    bool flow1 = Config::ConnectWithoutContextFailSafe("/NodeList/0/$ns3::TcpL4Protocol/SocketList/*/CongestionWindow", MakeBoundCallback(&CwndTrace, 1));
-    bool flow2 = Config::ConnectWithoutContextFailSafe("/NodeList/1/$ns3::TcpL4Protocol/SocketList/*/CongestionWindow", MakeBoundCallback(&CwndTrace, 2));
-    bool flow3 = Config::ConnectWithoutContextFailSafe("/NodeList/2/$ns3::TcpL4Protocol/SocketList/*/CongestionWindow", MakeBoundCallback(&CwndTrace, 3));
-    cout << "[V3] TCP Flow 1 CWND Trace: " << (flow1 ? "CONNECTED" : "FAILED") << "\n";
-    cout << "[V3] TCP Flow 2 CWND Trace: " << (flow2 ? "CONNECTED" : "FAILED") << "\n";
-    cout << "[V3] TCP Flow 3 CWND Trace: " << (flow3 ? "CONNECTED" : "FAILED") << "\n";
+    Config::ConnectWithoutContext(
+        "/NodeList/*/$ns3::TcpL4Protocol/SocketList/*/$ns3::TcpSocketBase/EcnState",
+        MakeCallback(&TcpEcnStateTrace));
 }
 
 int main(int argc, char* argv[])
 {
-    uint64_t packetCount = 100000;
-    double simulationTime = 30.0;
-    double alpha = 2.5;
-    uint32_t packetSize = 1000;
+    uint64_t packetCount = 1000000;
+    double simulationTime = 60.0;
+    double alpha = 0.8;
+    double controlInterval = 0.05;
+    uint32_t packetSize = 1448;
     string tcpLinkRate = "1Gbps";
     string vbrLinkRate = "100Mbps";
     string bottleneckRate = "50Mbps";
-    string tcpLinkDelay = "5ms";
-    string vbrLinkDelay = "5ms";
-    string bottleneckDelay = "50ms";
-    string receiverLinkRate = "100Mbps";
-    string receiverLinkDelay = "5ms";
-    uint32_t redMinTh = 1;
-    uint32_t redMaxTh = 3;
-    uint32_t queueSize = 10;
-    uint32_t vbrMinRate = 5;
-    uint32_t vbrMaxRate = 30;
+    string tcpLinkDelay = "1ms";
+    string vbrLinkDelay = "1ms";
+    string bottleneckDelay = "55ms";
+    string receiverLinkRate = "1Gbps";
+    string receiverLinkDelay = "1ms";
+    uint32_t redMinTh = 40;
+    uint32_t redMaxTh = 100;
+    uint32_t queueSize = 120;
+    uint32_t vbrMinRate = 6;
+    uint32_t vbrMaxRate = 14;
+    uint32_t runNumber = 1;
+    string outputPrefix = "ecn-final";
+    string tcpAlgo = "EcnController";
 
     CommandLine cmd(__FILE__);
     cmd.AddValue("packetCount", "Number of packets for each TCP flow", packetCount);
     cmd.AddValue("simulationTime", "Simulation time in seconds", simulationTime);
     cmd.AddValue("alpha", "ECN controller alpha", alpha);
+    cmd.AddValue("controlInterval", "Controller interval in seconds", controlInterval);
     cmd.AddValue("packetSize", "Packet size in bytes", packetSize);
+    cmd.AddValue("tcpLinkRate", "TCP sender access-link data rate", tcpLinkRate);
+    cmd.AddValue("tcpLinkDelay", "TCP sender access-link delay", tcpLinkDelay);
+    cmd.AddValue("vbrLinkRate", "VBR sender access-link data rate", vbrLinkRate);
+    cmd.AddValue("vbrLinkDelay", "VBR sender access-link delay", vbrLinkDelay);
     cmd.AddValue("bottleneckRate", "Shared bottleneck data rate", bottleneckRate);
+    cmd.AddValue("bottleneckDelay", "Shared bottleneck delay", bottleneckDelay);
+    cmd.AddValue("receiverLinkRate", "Receiver link data rate", receiverLinkRate);
+    cmd.AddValue("receiverLinkDelay", "Receiver link delay", receiverLinkDelay);
     cmd.AddValue("redMinTh", "RED minimum threshold in packets", redMinTh);
     cmd.AddValue("redMaxTh", "RED maximum threshold in packets", redMaxTh);
     cmd.AddValue("queueSize", "Maximum queue size in packets", queueSize);
     cmd.AddValue("vbrMinRate", "Minimum VBR rate in Mbps", vbrMinRate);
     cmd.AddValue("vbrMaxRate", "Maximum VBR rate in Mbps", vbrMaxRate);
+    cmd.AddValue("runNumber", "Experiment run number", runNumber);
+    cmd.AddValue("outputPrefix", "Prefix for CSV and FlowMonitor output files", outputPrefix);
+    cmd.AddValue("tcpAlgo",
+                 "TCP congestion control algorithm (EcnController, TcpLinuxReno, TcpNewReno, TcpCubic, TcpBbr, TcpDctcp)",
+                 tcpAlgo);
     cmd.Parse(argc, argv);
+
+    if (simulationTime <= 1.0 || packetSize == 0 || vbrMinRate == 0 || vbrMaxRate == 0 || controlInterval <= 0.0)
+    {
+        cerr << "simulationTime must exceed 1 s; packetSize, controlInterval, and VBR rates must be non-zero\n";
+        return 2;
+    }
+
+    RngSeedManager::SetRun(runNumber);
 
     uint64_t totalBytes = packetCount * static_cast<uint64_t>(packetSize);
     uint64_t bottleneckBps = DataRate(bottleneckRate).GetBitRate();
 
-    EcnController::SetAlpha(alpha);
-    EcnController::SetBottleneckBps(bottleneckBps);
+    bool isCustomController = (tcpAlgo == "EcnController");
+    bool useEcn = (isCustomController || tcpAlgo == "TcpDctcp");
+
+    EcnController::Reset();
     VbrGenerator::SetRateRange(vbrMinRate, vbrMaxRate);
     EcnMonitor::Reset();
 
-    Config::SetDefault("ns3::TcpSocketBase::UseEcn", StringValue("On"));
-    Config::SetDefault("ns3::TcpL4Protocol::SocketType", TypeIdValue(EcnController::GetTypeId()));
+    if (isCustomController)
+    {
+        EcnController::SetAlpha(alpha);
+        EcnController::SetBottleneckBps(bottleneckBps);
+        EcnController::SetControlInterval(controlInterval);
+
+        if (!EcnController::SetTimeSeriesFile(outputPrefix + "-timeseries.csv"))
+        {
+            cerr << "Unable to open controller time-series output: "
+                 << outputPrefix << "-timeseries.csv\n";
+            return 1;
+        }
+    }
+
+    Config::SetDefault("ns3::TcpSocketBase::UseEcn", StringValue(useEcn ? "On" : "Off"));
+    Config::SetDefault("ns3::TcpSocketBase::Sack", BooleanValue(true));
+    Config::SetDefault("ns3::TcpSocketBase::Timestamp", BooleanValue(true));
+    Config::SetDefault("ns3::TcpSocketBase::WindowScaling", BooleanValue(true));
+    Config::SetDefault("ns3::TcpSocketBase::LimitedTransmit", BooleanValue(true));
+    Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(packetSize));
+    Config::SetDefault("ns3::TcpSocket::SndBufSize", UintegerValue(4194304));
+    Config::SetDefault("ns3::TcpSocket::RcvBufSize", UintegerValue(4194304));
+
+    TypeId tcpTid;
+    if (isCustomController)
+    {
+        tcpTid = EcnController::GetTypeId();
+    }
+    else
+    {
+        string fullTypeName = (tcpAlgo.rfind("ns3::", 0) == 0) ? tcpAlgo : ("ns3::" + tcpAlgo);
+        if (!TypeId::LookupByNameFailSafe(fullTypeName, &tcpTid))
+        {
+            cerr << "Unknown TCP congestion control TypeId: " << fullTypeName << "\n";
+            return 2;
+        }
+    }
+    Config::SetDefault("ns3::TcpL4Protocol::SocketType", TypeIdValue(tcpTid));
 
     NodeContainer tcpSenders;
     tcpSenders.Create(3);
-
     NodeContainer vbrSender;
     vbrSender.Create(1);
-
     NodeContainer routerNode;
     routerNode.Create(1);
-
     NodeContainer bottleneckNode;
     bottleneckNode.Create(1);
-
     NodeContainer receivers;
     receivers.Create(2);
 
@@ -161,7 +206,13 @@ int main(int argc, char* argv[])
     NetDeviceContainer bottleneckReceiver2 = receiverLink.Install(bottleneck, receiver2);
 
     TrafficControlHelper red;
-    red.SetRootQueueDisc("ns3::RedQueueDisc", "LinkBandwidth", StringValue(bottleneckRate), "LinkDelay", StringValue(bottleneckDelay), "MinTh", DoubleValue(redMinTh), "MaxTh", DoubleValue(redMaxTh), "MaxSize", QueueSizeValue(QueueSize(QueueSizeUnit::PACKETS, queueSize)), "UseEcn", BooleanValue(true));
+    red.SetRootQueueDisc("ns3::RedQueueDisc",
+                         "LinkBandwidth", StringValue(bottleneckRate),
+                         "LinkDelay", StringValue(bottleneckDelay),
+                         "MinTh", DoubleValue(redMinTh),
+                         "MaxTh", DoubleValue(redMaxTh),
+                         "MaxSize", QueueSizeValue(QueueSize(QueueSizeUnit::PACKETS, queueSize)),
+                         "UseEcn", BooleanValue(true));
 
     QueueDiscContainer queueDiscs = red.Install(routerBottleneck);
 
@@ -223,107 +274,70 @@ int main(int argc, char* argv[])
     Address vbrDestination1 = InetSocketAddress(receiver1If.GetAddress(1), vbrPort1);
     Address vbrDestination2 = InetSocketAddress(receiver2If.GetAddress(1), vbrPort2);
 
-    VbrGenerator::InstallBoth(vbr, vbrDestination1, vbrDestination2, packetSize, 1.0, simulationTime);
-
-    /*
-     * Open CWND output files before simulation starts.
-     */
-    g_cwndFiles[0].open("v3-flow1-cwnd.csv", ios::out | ios::trunc);
-    g_cwndFiles[1].open("v3-flow2-cwnd.csv", ios::out | ios::trunc);
-    g_cwndFiles[2].open("v3-flow3-cwnd.csv", ios::out | ios::trunc);
-
-    cout << "[V3] CWND File 1: " << (g_cwndFiles[0].is_open() ? "OPENED" : "FAILED") << "\n";
-    cout << "[V3] CWND File 2: " << (g_cwndFiles[1].is_open() ? "OPENED" : "FAILED") << "\n";
-    cout << "[V3] CWND File 3: " << (g_cwndFiles[2].is_open() ? "OPENED" : "FAILED") << "\n";
-
-    for (uint32_t i = 0; i < 3; ++i)
-    {
-        if (g_cwndFiles[i].is_open())
-        {
-            g_cwndFiles[i] << "Time,CwndOldBytes,CwndNewBytes\n";
-        }
-    }
-
-    /*
-     * TCP BulkSend applications start at 1.0 seconds.
-     * Connect to their CWND trace sources shortly after
-     * the applications have created their TCP sockets.
-     */
-    Simulator::Schedule(Seconds(1.001), &ConnectCwndTraces);
+    VbrGenerator::InstallBoth(vbr, vbrDestination1, vbrDestination2, 1000, 1.0, simulationTime);
+    Simulator::Schedule(Seconds(1.001), &ConnectTcpEcnTraces);
 
     FlowMonitorHelper flowmonHelper;
     Ptr<FlowMonitor> flowmon = flowmonHelper.InstallAll();
 
     cout << "\n";
-    cout << "==================================================\n";
-    cout << "       INTELLIGENT ECN CONGESTION CONTROLLER V3\n";
-    cout << "==================================================\n";
-    cout << "Topology           : 3 TCP + 2 VBR -> Router -> 50 Mbps Bottleneck -> 2 Receivers\n";
-    cout << "TCP Flows          : 3\n";
-    cout << "VBR Flows          : 2\n";
-    cout << "Controller         : ECN + BDP\n";
-    cout << "TCP Base           : NewReno\n";
-    cout << "ECN                : ENABLED\n";
-    cout << "Queue Management   : RED + ECN\n";
-    cout << "TCP -> Router      : " << tcpLinkRate << " / " << tcpLinkDelay << "\n";
-    cout << "VBR -> Router      : " << vbrLinkRate << " / " << vbrLinkDelay << "\n";
-    cout << "Shared Bottleneck  : " << bottleneckRate << " / " << bottleneckDelay << "\n";
-    cout << "Router -> Receiver : " << receiverLinkRate << " / " << receiverLinkDelay << "\n";
-    cout << "RED MinTh          : " << redMinTh << " packets\n";
-    cout << "RED MaxTh          : " << redMaxTh << " packets\n";
-    cout << "Queue Size         : " << queueSize << " packets\n";
-    cout << "Alpha              : " << alpha << "\n";
-    cout << "Packet Count       : " << packetCount << " per TCP flow\n";
-    cout << "Packet Size        : " << packetSize << " bytes\n";
-    cout << "VBR Rate Range     : " << vbrMinRate << " - " << vbrMaxRate << " Mbps\n";
-    cout << "Simulation Time    : " << simulationTime << " seconds\n";
-    cout << "==================================================\n";
-    cout << "CWND Formula:\n";
-    cout << "CWND_new = min(BDP, CWND_old * (1 - Alpha * ECN_Ratio))\n";
-    cout << "BDP Formula:\n";
-    cout << "BDP = Bottleneck Bandwidth * RTT\n";
-    cout << "==================================================\n";
+    cout << "============================================================\n";
+    cout << "          INTELLIGENT ECN CONGESTION CONTROLLER V3\n";
+    cout << "============================================================\n";
+    cout << "Topology             : 3 TCP + 2 VBR\n";
+    cout << "TCP Flows            : 3\n";
+    cout << "VBR Flows            : 2\n";
+    cout << "Controller           : " << (isCustomController ? "ECN + BDP (Custom)" : tcpAlgo) << "\n";
+    cout << "TCP Socket Type      : " << tcpTid.GetName() << "\n";
+    cout << "ECN                  : " << (useEcn ? "ENABLED" : "DISABLED") << "\n";
+    cout << "Queue Management     : " << (useEcn ? "RED + ECN" : "RED (Drop)") << "\n";
+    cout << "TCP -> Router        : " << tcpLinkRate << " / " << tcpLinkDelay << "\n";
+    cout << "VBR -> Router        : " << vbrLinkRate << " / " << vbrLinkDelay << "\n";
+    cout << "Shared Bottleneck    : " << bottleneckRate << " / " << bottleneckDelay << "\n";
+    cout << "Router -> Receiver   : " << receiverLinkRate << " / " << receiverLinkDelay << "\n";
+    cout << "RED MinTh            : " << redMinTh << " packets\n";
+    cout << "RED MaxTh            : " << redMaxTh << " packets\n";
+    cout << "Queue Size           : " << queueSize << " packets\n";
+    cout << "Alpha                : " << alpha << "\n";
+    cout << "Packet Count         : " << packetCount << " per TCP flow\n";
+    cout << "Packet Size          : " << packetSize << " bytes\n";
+    cout << "VBR Rate Range       : " << vbrMinRate << " - " << vbrMaxRate << " Mbps\n";
+    cout << "Simulation Time      : " << simulationTime << " seconds\n";
+    cout << "Controller Interval  : " << fixed << setprecision(3) << controlInterval << " second\n";
+    cout << "============================================================\n";
+    if (isCustomController)
+    {
+        cout << "ECN Response         : CWND reduction based on ECN ratio\n";
+        cout << "No-ECN Response      : RTT-normalized CWND increase\n";
+        cout << "BDP Constraint       : CWND <= Fair-Share BDP\n";
+        cout << "============================================================\n";
+    }
 
     Simulator::Stop(Seconds(simulationTime));
     Simulator::Run();
 
     flowmon->CheckForLostPackets();
-    flowmon->SerializeToXmlFile("ecn-v2-flowmon.xml", true, true);
 
     Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier>(flowmonHelper.GetClassifier());
     map<FlowId, FlowMonitor::FlowStats> stats = flowmon->GetFlowStats();
 
-    ofstream csv("ecn-v2-results.csv");
-    csv << "FlowId,Source,Destination,Protocol,TxPackets,RxPackets,LostPackets,PacketLossPercent,TxBytes,RxBytes,ThroughputMbps,MeanDelayMs,MeanJitterMs\n";
+    double totalTcpThroughput = 0.0;
+    double totalTcpDelay = 0.0;
+    uint64_t totalTcpRxPackets = 0;
+    uint64_t totalTcpTxPackets = 0;
+    uint64_t totalTcpLostPackets = 0;
+    uint32_t tcpFlowCount = 0;
 
-    ofstream txt("ecn-v2-results.txt");
-    txt << "==================================================\n";
-    txt << "       INTELLIGENT ECN CONGESTION CONTROLLER V3\n";
-    txt << "==================================================\n";
-    txt << "Bottleneck Rate    : " << bottleneckRate << "\n";
-    txt << "RED MinTh          : " << redMinTh << " packets\n";
-    txt << "RED MaxTh          : " << redMaxTh << " packets\n";
-    txt << "Queue Size         : " << queueSize << " packets\n";
-    txt << "Alpha              : " << alpha << "\n";
-    txt << "VBR Rate Range     : " << vbrMinRate << " - " << vbrMaxRate << " Mbps\n";
-    txt << "Simulation Time    : " << simulationTime << " seconds\n";
-    txt << "\n";
-    txt << "Total Packets      : " << EcnMonitor::GetTotalPackets() << "\n";
-    txt << "ECN Marked Packets : " << EcnMonitor::GetMarkedPackets() << "\n";
-    txt << "ECN Ratio          : " << fixed << setprecision(8) << EcnMonitor::GetCumulativeRatio() << "\n";
-    txt << "ECN Percentage     : " << fixed << setprecision(4) << EcnMonitor::GetCumulativeRatio() * 100.0 << " %\n";
-    txt << "ECN ACK Count      : " << EcnMonitor::GetEcnAckCount() << "\n";
-    txt << "Last ECN ACK Time  : " << EcnMonitor::GetLastEcnAckTime() << " s\n";
-    txt << "Controller Updates : " << EcnController::GetControllerUpdates() << "\n";
-    txt << "Last Old CWND      : " << EcnController::GetLastOldCwnd() << " bytes\n";
-    txt << "Last Formula CWND  : " << EcnController::GetLastFormulaCwnd() << " bytes\n";
-    txt << "Last Final CWND    : " << EcnController::GetLastFinalCwnd() << " bytes\n";
-    txt << "==================================================\n";
+    cout << "\n";
+    cout << "============================================================\n";
+    cout << "                     FLOW RESULTS\n";
+    cout << "============================================================\n";
 
     for (const auto& flow : stats)
     {
         Ipv4FlowClassifier::FiveTuple tuple = classifier->FindFlow(flow.first);
         FlowMonitor::FlowStats st = flow.second;
+
         double lossPercent = 0.0;
         double throughputMbps = 0.0;
         double meanDelayMs = 0.0;
@@ -334,9 +348,14 @@ int main(int argc, char* argv[])
             lossPercent = 100.0 * static_cast<double>(st.lostPackets) / static_cast<double>(st.txPackets);
         }
 
-        if (simulationTime > 0.0)
+        double flowDuration = st.timeLastRxPacket.GetSeconds() - st.timeFirstTxPacket.GetSeconds();
+        if (flowDuration <= 0.0)
         {
-            throughputMbps = static_cast<double>(st.rxBytes) * 8.0 / simulationTime / 1000000.0;
+            flowDuration = simulationTime;
+        }
+        if (flowDuration > 0.0)
+        {
+            throughputMbps = static_cast<double>(st.rxBytes) * 8.0 / flowDuration / 1000000.0;
         }
 
         if (st.rxPackets > 0)
@@ -363,92 +382,82 @@ int main(int argc, char* argv[])
         cout << "Throughput          : " << fixed << setprecision(4) << throughputMbps << " Mbps\n";
         cout << "Mean Delay          : " << fixed << setprecision(4) << meanDelayMs << " ms\n";
         cout << "Mean Jitter         : " << fixed << setprecision(4) << meanJitterMs << " ms\n";
+        cout << "Measured Duration   : " << fixed << setprecision(4) << flowDuration << " s\n";
         cout << "------------------------------------------\n";
 
-        csv << flow.first << ",";
-        csv << tuple.sourceAddress << ",";
-        csv << tuple.destinationAddress << ",";
-        csv << static_cast<uint32_t>(tuple.protocol) << ",";
-        csv << st.txPackets << ",";
-        csv << st.rxPackets << ",";
-        csv << st.lostPackets << ",";
-        csv << fixed << setprecision(4) << lossPercent << ",";
-        csv << st.txBytes << ",";
-        csv << st.rxBytes << ",";
-        csv << fixed << setprecision(4) << throughputMbps << ",";
-        csv << fixed << setprecision(4) << meanDelayMs << ",";
-        csv << fixed << setprecision(4) << meanJitterMs << "\n";
+        if (tuple.protocol == 6 &&
+            (tuple.destinationPort == tcpPort1 || tuple.destinationPort == tcpPort2 ||
+             tuple.destinationPort == tcpPort3))
+        {
+            ++tcpFlowCount;
+            totalTcpThroughput += throughputMbps;
+            totalTcpDelay += meanDelayMs;
+            totalTcpRxPackets += st.rxPackets;
+            totalTcpTxPackets += st.txPackets;
+            totalTcpLostPackets += st.lostPackets;
+        }
+    }
 
-        txt << "\n";
-        txt << "---------------- FLOW " << flow.first << " ----------------\n";
-        txt << "Source              : " << tuple.sourceAddress << "\n";
-        txt << "Destination         : " << tuple.destinationAddress << "\n";
-        txt << "Protocol            : " << static_cast<uint32_t>(tuple.protocol) << "\n";
-        txt << "TX Packets          : " << st.txPackets << "\n";
-        txt << "RX Packets          : " << st.rxPackets << "\n";
-        txt << "Lost Packets        : " << st.lostPackets << "\n";
-        txt << "Packet Loss         : " << fixed << setprecision(4) << lossPercent << " %\n";
-        txt << "TX Bytes            : " << st.txBytes << "\n";
-        txt << "RX Bytes            : " << st.rxBytes << "\n";
-        txt << "Throughput          : " << fixed << setprecision(4) << throughputMbps << " Mbps\n";
-        txt << "Mean Delay          : " << fixed << setprecision(4) << meanDelayMs << " ms\n";
-        txt << "Mean Jitter         : " << fixed << setprecision(4) << meanJitterMs << " ms\n";
-        txt << "------------------------------------------\n";
+    double averageTcpThroughput = 0.0;
+    double averageTcpDelay = 0.0;
+    double tcpLossPercent = 0.0;
+
+    if (tcpFlowCount > 0)
+    {
+        averageTcpThroughput = totalTcpThroughput / static_cast<double>(tcpFlowCount);
+        averageTcpDelay = totalTcpDelay / static_cast<double>(tcpFlowCount);
+    }
+
+    if (totalTcpTxPackets > 0)
+    {
+        tcpLossPercent = 100.0 * static_cast<double>(totalTcpLostPackets) / static_cast<double>(totalTcpTxPackets);
     }
 
     cout << "\n";
-    cout << "==================================================\n";
-    cout << "                 FINAL RESULTS\n";
-    cout << "==================================================\n";
-    cout << "Total Packets      : " << EcnMonitor::GetTotalPackets() << "\n";
-    cout << "ECN Marked Packets : " << EcnMonitor::GetMarkedPackets() << "\n";
-    cout << "ECN Ratio          : " << fixed << setprecision(8) << EcnMonitor::GetCumulativeRatio() << "\n";
-    cout << "ECN Percentage     : " << fixed << setprecision(4) << EcnMonitor::GetCumulativeRatio() * 100.0 << " %\n";
-    cout << "ECN ACK Count      : " << EcnMonitor::GetEcnAckCount() << "\n";
-    cout << "Last ECN ACK Time  : " << EcnMonitor::GetLastEcnAckTime() << " s\n";
-    cout << "Controller Updates : " << EcnController::GetControllerUpdates() << "\n";
-    cout << "Last Old CWND      : " << EcnController::GetLastOldCwnd() << " bytes\n";
-    cout << "Last Formula CWND  : " << EcnController::GetLastFormulaCwnd() << " bytes\n";
-    cout << "Last Final CWND    : " << EcnController::GetLastFinalCwnd() << " bytes\n";
-    cout << "==================================================\n";
-    cout << "Generated files:\n";
-    cout << "  ecn-v2-results.csv\n";
-    cout << "  ecn-v2-results.txt\n";
-    cout << "  ecn-v2-flowmon.xml\n";
-    cout << "  v3-flow1-cwnd.csv\n";
-    cout << "  v3-flow2-cwnd.csv\n";
-    cout << "  v3-flow3-cwnd.csv\n";
-    cout << "==================================================\n";
+    cout << "============================================================\n";
+    cout << "                     FINAL RESULTS\n";
+    cout << "============================================================\n";
+    cout << "Algorithm            : " << tcpAlgo << "\n";
+    cout << "Total Packets        : " << EcnMonitor::GetTotalPackets() << "\n";
+    cout << "ECN Marked Packets   : " << EcnMonitor::GetMarkedPackets() << "\n";
+    cout << "ECN Ratio            : " << fixed << setprecision(8) << EcnMonitor::GetCumulativeRatio() << "\n";
+    cout << "ECN Percentage       : " << fixed << setprecision(4) << EcnMonitor::GetCumulativeRatio() * 100.0 << " %\n";
+    cout << "ECN ACK Count        : " << EcnMonitor::GetEcnAckCount() << "\n";
+    cout << "Last ECN ACK Time    : " << EcnMonitor::GetLastEcnAckTime() << " s\n";
+    cout << "Controller Updates   : " << EcnController::GetControllerUpdates() << "\n";
+    cout << "Last Old CWND        : " << EcnController::GetLastOldCwnd() << " bytes\n";
+    cout << "Last Formula CWND    : " << EcnController::GetLastFormulaCwnd() << " bytes\n";
+    cout << "Last Final CWND      : " << EcnController::GetLastFinalCwnd() << " bytes\n";
+    cout << "Average TCP Throughput: " << fixed << setprecision(4) << averageTcpThroughput << " Mbps\n";
+    cout << "Aggregate TCP Throughput: " << fixed << setprecision(4) << totalTcpThroughput << " Mbps\n";
+    cout << "Average TCP Delay    : " << fixed << setprecision(4) << averageTcpDelay << " ms\n";
+    cout << "Aggregate TCP Loss   : " << fixed << setprecision(4) << tcpLossPercent << " %\n";
+    cout << "============================================================\n";
 
-    txt << "\n";
-    txt << "==================================================\n";
-    txt << "                 FINAL RESULTS\n";
-    txt << "==================================================\n";
-    txt << "Total Packets      : " << EcnMonitor::GetTotalPackets() << "\n";
-    txt << "ECN Marked Packets : " << EcnMonitor::GetMarkedPackets() << "\n";
-    txt << "ECN Ratio          : " << fixed << setprecision(8) << EcnMonitor::GetCumulativeRatio() << "\n";
-    txt << "ECN Percentage     : " << fixed << setprecision(4) << EcnMonitor::GetCumulativeRatio() * 100.0 << " %\n";
-    txt << "ECN ACK Count      : " << EcnMonitor::GetEcnAckCount() << "\n";
-    txt << "Last ECN ACK Time  : " << EcnMonitor::GetLastEcnAckTime() << " s\n";
-    txt << "Controller Updates : " << EcnController::GetControllerUpdates() << "\n";
-    txt << "Last Old CWND      : " << EcnController::GetLastOldCwnd() << " bytes\n";
-    txt << "Last Formula CWND  : " << EcnController::GetLastFormulaCwnd() << " bytes\n";
-    txt << "Last Final CWND    : " << EcnController::GetLastFinalCwnd() << " bytes\n";
-    txt << "==================================================\n";
-
-    csv.close();
-    txt.close();
-
-    for (uint32_t i = 0; i < 3; ++i)
+    ofstream results(outputPrefix + "-results.csv");
+    if (!results.is_open())
     {
-        if (g_cwndFiles[i].is_open())
-        {
-            g_cwndFiles[i].flush();
-            g_cwndFiles[i].close();
-        }
+        cerr << "Unable to open results output: " << outputPrefix << "-results.csv\n";
+        Simulator::Destroy();
+        return 1;
     }
+    results << "metric,value\n";
+    results << "algorithm," << tcpAlgo << "\n";
+    results << "alpha," << EcnController::GetAlpha() << "\n";
+    results << "control_interval_s," << controlInterval << "\n";
+    results << "queue_enqueued_packets," << EcnMonitor::GetTotalPackets() << "\n";
+    results << "queue_marked_packets," << EcnMonitor::GetMarkedPackets() << "\n";
+    results << "queue_ecn_ratio," << EcnMonitor::GetCumulativeRatio() << "\n";
+    results << "ecn_feedback_events," << EcnMonitor::GetEcnAckCount() << "\n";
+    results << "controller_updates," << EcnController::GetControllerUpdates() << "\n";
+    results << "average_tcp_throughput_mbps," << averageTcpThroughput << "\n";
+    results << "aggregate_tcp_throughput_mbps," << totalTcpThroughput << "\n";
+    results << "average_tcp_delay_ms," << averageTcpDelay << "\n";
+    results << "aggregate_tcp_loss_percent," << tcpLossPercent << "\n";
+    results.close();
+
+    flowmon->SerializeToXmlFile(outputPrefix + "-flowmon.xml", true, true);
 
     Simulator::Destroy();
     return 0;
 }
-

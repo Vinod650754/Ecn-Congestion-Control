@@ -18,6 +18,11 @@ struct BdpData
 unordered_map<const TcpSocketState*, BdpData> g_bdpData;
 }
 
+void BdpMonitor::Clear()
+{
+    g_bdpData.clear();
+}
+
 void BdpMonitor::Reset(Ptr<const TcpSocketState> tcb)
 {
     if (tcb)

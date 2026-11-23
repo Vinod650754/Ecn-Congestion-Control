@@ -1,0 +1,1485 @@
+[V3] Queue Enqueue Trace: CONNECTED
+[V3] Queue Mark Trace: CONNECTED
+
+============================================================
+          INTELLIGENT ECN CONGESTION CONTROLLER V3
+============================================================
+Topology             : 3 TCP + 2 VBR
+TCP Flows            : 3
+VBR Flows            : 2
+Controller           : ECN + BDP
+TCP Base             : NewReno
+ECN                  : ENABLED
+Queue Management     : RED + ECN
+TCP -> Router        : 1Gbps / 5ms
+VBR -> Router        : 100Mbps / 5ms
+Shared Bottleneck    : 50Mbps / 50ms
+Router -> Receiver   : 100Mbps / 5ms
+RED MinTh            : 5 packets
+RED MaxTh            : 15 packets
+Queue Size           : 200 packets
+Alpha                : 1
+Packet Count         : 100000 per TCP flow
+Packet Size          : 1000 bytes
+VBR Rate Range       : 10 - 20 Mbps
+Simulation Time      : 30 seconds
+Controller Interval  : 1.000 second
+============================================================
+ECN Response         : CWND reduction based on ECN ratio
+No-ECN Response      : RTT-normalized CWND increase
+BDP Constraint       : CWND <= BDP
+============================================================
+[VBR] time=1.00 s | rate=17Mbps
+[VBR] time=1.00 s | rate=18Mbps
+[V3] Flow 1 registered at 1.240193 s | Initial CWND=5360 bytes
+[V3] Flow 2 registered at 1.240390 s | Initial CWND=5360 bytes
+[V3] Flow 3 registered at 1.240777 s | Initial CWND=5360 bytes
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 2.240 s
+Interval            : 1.000 s
+Interval Packets    : 4763
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.120689 s
+BDP                 : 754307 bytes
+Old CWND            : 5360 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4441.16
+Formula CWND        : 9802 bytes
+Final CWND          : 9802 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.120667 s
+BDP                 : 754170 bytes
+Old CWND            : 5360 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4441.97
+Formula CWND        : 9802 bytes
+Final CWND          : 9802 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.120640 s
+BDP                 : 754001 bytes
+Old CWND            : 5360 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4442.96
+Formula CWND        : 9803 bytes
+Final CWND          : 9803 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 3
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 3.240 s
+Interval            : 1.000 s
+Interval Packets    : 5026
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.120686 s
+BDP                 : 754284 bytes
+Old CWND            : 9802 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4441.29
+Formula CWND        : 14244 bytes
+Final CWND          : 14244 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.120620 s
+BDP                 : 753874 bytes
+Old CWND            : 9802 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4443.71
+Formula CWND        : 14246 bytes
+Final CWND          : 14246 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.120623 s
+BDP                 : 753895 bytes
+Old CWND            : 9803 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4443.58
+Formula CWND        : 14247 bytes
+Final CWND          : 14247 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 6
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 4.240 s
+Interval            : 1.000 s
+Interval Packets    : 5323
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.120546 s
+BDP                 : 753412 bytes
+Old CWND            : 14244 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4446.43
+Formula CWND        : 18691 bytes
+Final CWND          : 18691 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.120874 s
+BDP                 : 755464 bytes
+Old CWND            : 14246 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4434.36
+Formula CWND        : 18681 bytes
+Final CWND          : 18681 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.120807 s
+BDP                 : 755042 bytes
+Old CWND            : 14247 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4436.83
+Formula CWND        : 18684 bytes
+Final CWND          : 18684 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 9
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 5.240 s
+Interval            : 1.000 s
+Interval Packets    : 5671
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.120534 s
+BDP                 : 753336 bytes
+Old CWND            : 18691 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4446.89
+Formula CWND        : 23138 bytes
+Final CWND          : 23138 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.120655 s
+BDP                 : 754094 bytes
+Old CWND            : 18681 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4442.41
+Formula CWND        : 23124 bytes
+Final CWND          : 23124 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.120478 s
+BDP                 : 752990 bytes
+Old CWND            : 18684 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4448.93
+Formula CWND        : 23133 bytes
+Final CWND          : 23133 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 12
+============================================================
+[VBR] time=6.00 s | rate=13Mbps
+[VBR] time=6.00 s | rate=18Mbps
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 6.240 s
+Interval            : 1.000 s
+Interval Packets    : 5828
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.123508 s
+BDP                 : 771926 bytes
+Old CWND            : 23138 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4339.79
+Formula CWND        : 27478 bytes
+Final CWND          : 27478 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.123100 s
+BDP                 : 769378 bytes
+Old CWND            : 23124 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4354.17
+Formula CWND        : 27479 bytes
+Final CWND          : 27479 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.122552 s
+BDP                 : 765948 bytes
+Old CWND            : 23133 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4373.66
+Formula CWND        : 27507 bytes
+Final CWND          : 27507 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 15
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 7.240 s
+Interval            : 1.000 s
+Interval Packets    : 5732
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.123087 s
+BDP                 : 769296 bytes
+Old CWND            : 27478 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4354.63
+Formula CWND        : 31833 bytes
+Final CWND          : 31833 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.122768 s
+BDP                 : 767298 bytes
+Old CWND            : 27479 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4365.97
+Formula CWND        : 31845 bytes
+Final CWND          : 31845 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.122230 s
+BDP                 : 763937 bytes
+Old CWND            : 27507 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4385.18
+Formula CWND        : 31893 bytes
+Final CWND          : 31893 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 18
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 8.240 s
+Interval            : 1.000 s
+Interval Packets    : 6035
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.122890 s
+BDP                 : 768060 bytes
+Old CWND            : 31833 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4361.64
+Formula CWND        : 36195 bytes
+Final CWND          : 36195 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.121770 s
+BDP                 : 761064 bytes
+Old CWND            : 31845 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4401.73
+Formula CWND        : 36247 bytes
+Final CWND          : 36247 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.133847 s
+BDP                 : 836546 bytes
+Old CWND            : 31893 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4004.56
+Formula CWND        : 35898 bytes
+Final CWND          : 35898 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 21
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 9.240 s
+Interval            : 1.000 s
+Interval Packets    : 6380
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.122600 s
+BDP                 : 766249 bytes
+Old CWND            : 36195 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4371.95
+Formula CWND        : 40567 bytes
+Final CWND          : 40567 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.122263 s
+BDP                 : 764145 bytes
+Old CWND            : 36247 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4383.98
+Formula CWND        : 40631 bytes
+Final CWND          : 40631 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.120425 s
+BDP                 : 752654 bytes
+Old CWND            : 35898 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4450.91
+Formula CWND        : 40349 bytes
+Final CWND          : 40349 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 24
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 10.240 s
+Interval            : 1.000 s
+Interval Packets    : 6592
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.122508 s
+BDP                 : 765673 bytes
+Old CWND            : 40567 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4375.23
+Formula CWND        : 44943 bytes
+Final CWND          : 44943 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.122368 s
+BDP                 : 764797 bytes
+Old CWND            : 40631 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4380.24
+Formula CWND        : 45012 bytes
+Final CWND          : 45012 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.121787 s
+BDP                 : 761171 bytes
+Old CWND            : 40349 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4401.11
+Formula CWND        : 44751 bytes
+Final CWND          : 44751 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 27
+============================================================
+[VBR] time=11.00 s | rate=10Mbps
+[VBR] time=11.00 s | rate=19Mbps
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 11.240 s
+Interval            : 1.000 s
+Interval Packets    : 6860
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.120915 s
+BDP                 : 755717 bytes
+Old CWND            : 44943 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4432.87
+Formula CWND        : 49376 bytes
+Final CWND          : 49376 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.128660 s
+BDP                 : 804125 bytes
+Old CWND            : 45012 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4166.01
+Formula CWND        : 49179 bytes
+Final CWND          : 49179 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.121591 s
+BDP                 : 759943 bytes
+Old CWND            : 44751 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4408.22
+Formula CWND        : 49160 bytes
+Final CWND          : 49160 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 30
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 12.240 s
+Interval            : 1.000 s
+Interval Packets    : 7044
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.120347 s
+BDP                 : 752166 bytes
+Old CWND            : 49376 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4453.80
+Formula CWND        : 53830 bytes
+Final CWND          : 53830 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.122501 s
+BDP                 : 765634 bytes
+Old CWND            : 49179 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4375.46
+Formula CWND        : 53555 bytes
+Final CWND          : 53555 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.121057 s
+BDP                 : 756604 bytes
+Old CWND            : 49160 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4427.68
+Formula CWND        : 53588 bytes
+Final CWND          : 53588 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 33
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 13.240 s
+Interval            : 1.000 s
+Interval Packets    : 7323
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.120242 s
+BDP                 : 751514 bytes
+Old CWND            : 53830 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4457.67
+Formula CWND        : 58288 bytes
+Final CWND          : 58288 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.122089 s
+BDP                 : 763056 bytes
+Old CWND            : 53555 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4390.24
+Formula CWND        : 57946 bytes
+Final CWND          : 57946 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.121493 s
+BDP                 : 759334 bytes
+Old CWND            : 53588 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4411.76
+Formula CWND        : 58000 bytes
+Final CWND          : 58000 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 36
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 14.240 s
+Interval            : 1.000 s
+Interval Packets    : 7591
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.120423 s
+BDP                 : 752642 bytes
+Old CWND            : 58288 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4450.98
+Formula CWND        : 62739 bytes
+Final CWND          : 62739 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.120688 s
+BDP                 : 754301 bytes
+Old CWND            : 57946 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4441.19
+Formula CWND        : 62388 bytes
+Final CWND          : 62388 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.120418 s
+BDP                 : 752610 bytes
+Old CWND            : 58000 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4451.17
+Formula CWND        : 62452 bytes
+Final CWND          : 62452 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 39
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 15.240 s
+Interval            : 1.000 s
+Interval Packets    : 7988
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.122015 s
+BDP                 : 762593 bytes
+Old CWND            : 62739 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4392.91
+Formula CWND        : 67132 bytes
+Final CWND          : 67132 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.120420 s
+BDP                 : 752625 bytes
+Old CWND            : 62388 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4451.09
+Formula CWND        : 66840 bytes
+Final CWND          : 66840 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.120554 s
+BDP                 : 753462 bytes
+Old CWND            : 62452 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4446.14
+Formula CWND        : 66899 bytes
+Final CWND          : 66899 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 42
+============================================================
+[VBR] time=16.00 s | rate=17Mbps
+[VBR] time=16.00 s | rate=13Mbps
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 16.240 s
+Interval            : 1.000 s
+Interval Packets    : 8306
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.123545 s
+BDP                 : 772155 bytes
+Old CWND            : 67132 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4338.51
+Formula CWND        : 71471 bytes
+Final CWND          : 71471 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.121593 s
+BDP                 : 759953 bytes
+Old CWND            : 66840 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4408.16
+Formula CWND        : 71249 bytes
+Final CWND          : 71249 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.121477 s
+BDP                 : 759232 bytes
+Old CWND            : 66899 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4412.35
+Formula CWND        : 71312 bytes
+Final CWND          : 71312 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 45
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 17.240 s
+Interval            : 1.000 s
+Interval Packets    : 8650
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.123564 s
+BDP                 : 772277 bytes
+Old CWND            : 71471 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4337.82
+Formula CWND        : 75809 bytes
+Final CWND          : 75809 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.120481 s
+BDP                 : 753008 bytes
+Old CWND            : 71249 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4448.82
+Formula CWND        : 75698 bytes
+Final CWND          : 75698 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.121748 s
+BDP                 : 760926 bytes
+Old CWND            : 71312 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4402.53
+Formula CWND        : 75715 bytes
+Final CWND          : 75715 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 48
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 18.240 s
+Interval            : 1.000 s
+Interval Packets    : 9000
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.120854 s
+BDP                 : 755335 bytes
+Old CWND            : 75809 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4435.12
+Formula CWND        : 80245 bytes
+Final CWND          : 80245 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.121034 s
+BDP                 : 756460 bytes
+Old CWND            : 75698 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4428.52
+Formula CWND        : 80127 bytes
+Final CWND          : 80127 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.121685 s
+BDP                 : 760533 bytes
+Old CWND            : 75715 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4404.80
+Formula CWND        : 80120 bytes
+Final CWND          : 80120 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 51
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 19.240 s
+Interval            : 1.000 s
+Interval Packets    : 9271
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.121936 s
+BDP                 : 762103 bytes
+Old CWND            : 80245 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4395.73
+Formula CWND        : 84641 bytes
+Final CWND          : 84641 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.120888 s
+BDP                 : 755551 bytes
+Old CWND            : 80127 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4433.84
+Formula CWND        : 84561 bytes
+Final CWND          : 84561 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.120935 s
+BDP                 : 755841 bytes
+Old CWND            : 80120 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4432.15
+Formula CWND        : 84553 bytes
+Final CWND          : 84553 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 54
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 20.240 s
+Interval            : 1.000 s
+Interval Packets    : 9590
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.121439 s
+BDP                 : 758991 bytes
+Old CWND            : 84641 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4413.75
+Formula CWND        : 89055 bytes
+Final CWND          : 89055 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.122038 s
+BDP                 : 762736 bytes
+Old CWND            : 84561 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4392.08
+Formula CWND        : 88954 bytes
+Final CWND          : 88954 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.121670 s
+BDP                 : 760435 bytes
+Old CWND            : 84553 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4405.37
+Formula CWND        : 88959 bytes
+Final CWND          : 88959 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 57
+============================================================
+[VBR] time=21.00 s | rate=12Mbps
+[VBR] time=21.00 s | rate=18Mbps
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 21.240 s
+Interval            : 1.000 s
+Interval Packets    : 9843
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.121839 s
+BDP                 : 761493 bytes
+Old CWND            : 89055 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4399.25
+Formula CWND        : 93455 bytes
+Final CWND          : 93455 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.123266 s
+BDP                 : 770410 bytes
+Old CWND            : 88954 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4348.33
+Formula CWND        : 93303 bytes
+Final CWND          : 93303 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.123245 s
+BDP                 : 770280 bytes
+Old CWND            : 88959 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4349.06
+Formula CWND        : 93309 bytes
+Final CWND          : 93309 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 60
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 22.240 s
+Interval            : 1.000 s
+Interval Packets    : 9915
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.128777 s
+BDP                 : 804854 bytes
+Old CWND            : 93455 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4162.24
+Formula CWND        : 97618 bytes
+Final CWND          : 97618 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.128795 s
+BDP                 : 804971 bytes
+Old CWND            : 93303 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4161.64
+Formula CWND        : 97465 bytes
+Final CWND          : 97465 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.128613 s
+BDP                 : 803831 bytes
+Old CWND            : 93309 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4167.54
+Formula CWND        : 97477 bytes
+Final CWND          : 97477 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 63
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 23.240 s
+Interval            : 1.000 s
+Interval Packets    : 9891
+Interval ECN Marks  : 1
+Interval ECN Ratio  : 0.00010110
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.133945 s
+BDP                 : 837155 bytes
+Old CWND            : 97618 bytes
+ECN Ratio           : 0.00010110
+Reduction Factor    : 0.99989890
+Increase Bytes      : 0.00
+Formula CWND        : 97608 bytes
+Final CWND          : 97608 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.134054 s
+BDP                 : 837835 bytes
+Old CWND            : 97465 bytes
+ECN Ratio           : 0.00010110
+Reduction Factor    : 0.99989890
+Increase Bytes      : 0.00
+Formula CWND        : 97455 bytes
+Final CWND          : 97455 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.134418 s
+BDP                 : 840112 bytes
+Old CWND            : 97477 bytes
+ECN Ratio           : 0.00010110
+Reduction Factor    : 0.99989890
+Increase Bytes      : 0.00
+Formula CWND        : 97467 bytes
+Final CWND          : 97467 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Total Controller Updates: 66
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 24.240 s
+Interval            : 1.000 s
+Interval Packets    : 9822
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.133641 s
+BDP                 : 835257 bytes
+Old CWND            : 97608 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4010.74
+Formula CWND        : 101619 bytes
+Final CWND          : 101619 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.135291 s
+BDP                 : 845568 bytes
+Old CWND            : 97455 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 3961.83
+Formula CWND        : 101417 bytes
+Final CWND          : 101417 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.135068 s
+BDP                 : 844175 bytes
+Old CWND            : 97467 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 3968.37
+Formula CWND        : 101436 bytes
+Final CWND          : 101436 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 69
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 25.240 s
+Interval            : 1.000 s
+Interval Packets    : 9962
+Interval ECN Marks  : 88
+Interval ECN Ratio  : 0.00883357
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.135678 s
+BDP                 : 847986 bytes
+Old CWND            : 101619 bytes
+ECN Ratio           : 0.00883357
+Reduction Factor    : 0.99116643
+Increase Bytes      : 0.00
+Formula CWND        : 100721 bytes
+Final CWND          : 100721 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.134718 s
+BDP                 : 841988 bytes
+Old CWND            : 101417 bytes
+ECN Ratio           : 0.00883357
+Reduction Factor    : 0.99116643
+Increase Bytes      : 0.00
+Formula CWND        : 100521 bytes
+Final CWND          : 100521 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.135149 s
+BDP                 : 844679 bytes
+Old CWND            : 101436 bytes
+ECN Ratio           : 0.00883357
+Reduction Factor    : 0.99116643
+Increase Bytes      : 0.00
+Formula CWND        : 100539 bytes
+Final CWND          : 100539 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Total Controller Updates: 72
+============================================================
+[VBR] time=26.00 s | rate=17Mbps
+[VBR] time=26.00 s | rate=18Mbps
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 26.240 s
+Interval            : 1.000 s
+Interval Packets    : 9903
+Interval ECN Marks  : 200
+Interval ECN Ratio  : 0.02019590
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.135294 s
+BDP                 : 845586 bytes
+Old CWND            : 100721 bytes
+ECN Ratio           : 0.02019590
+Reduction Factor    : 0.97980410
+Increase Bytes      : 0.00
+Formula CWND        : 98686 bytes
+Final CWND          : 98686 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.136449 s
+BDP                 : 852804 bytes
+Old CWND            : 100521 bytes
+ECN Ratio           : 0.02019590
+Reduction Factor    : 0.97980410
+Increase Bytes      : 0.00
+Formula CWND        : 98490 bytes
+Final CWND          : 98490 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.135874 s
+BDP                 : 849210 bytes
+Old CWND            : 100539 bytes
+ECN Ratio           : 0.02019590
+Reduction Factor    : 0.97980410
+Increase Bytes      : 0.00
+Formula CWND        : 98508 bytes
+Final CWND          : 98508 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Total Controller Updates: 75
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 27.240 s
+Interval            : 1.000 s
+Interval Packets    : 9543
+Interval ECN Marks  : 453
+Interval ECN Ratio  : 0.04746935
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.136009 s
+BDP                 : 850057 bytes
+Old CWND            : 98686 bytes
+ECN Ratio           : 0.04746935
+Reduction Factor    : 0.95253065
+Increase Bytes      : 0.00
+Formula CWND        : 94001 bytes
+Final CWND          : 94001 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.139070 s
+BDP                 : 869188 bytes
+Old CWND            : 98490 bytes
+ECN Ratio           : 0.04746935
+Reduction Factor    : 0.95253065
+Increase Bytes      : 0.00
+Formula CWND        : 93814 bytes
+Final CWND          : 93814 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.125223 s
+BDP                 : 782644 bytes
+Old CWND            : 98508 bytes
+ECN Ratio           : 0.04746935
+Reduction Factor    : 0.95253065
+Increase Bytes      : 0.00
+Formula CWND        : 93831 bytes
+Final CWND          : 93831 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Total Controller Updates: 78
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 28.240 s
+Interval            : 1.000 s
+Interval Packets    : 8822
+Interval ECN Marks  : 23
+Interval ECN Ratio  : 0.00260712
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.124848 s
+BDP                 : 780298 bytes
+Old CWND            : 94001 bytes
+ECN Ratio           : 0.00260712
+Reduction Factor    : 0.99739288
+Increase Bytes      : 0.00
+Formula CWND        : 93755 bytes
+Final CWND          : 93755 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.139070 s
+BDP                 : 869188 bytes
+Old CWND            : 93814 bytes
+ECN Ratio           : 0.00260712
+Reduction Factor    : 0.99739288
+Increase Bytes      : 0.00
+Formula CWND        : 93569 bytes
+Final CWND          : 93569 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.122631 s
+BDP                 : 766441 bytes
+Old CWND            : 93831 bytes
+ECN Ratio           : 0.00260712
+Reduction Factor    : 0.99739288
+Increase Bytes      : 0.00
+Formula CWND        : 93586 bytes
+Final CWND          : 93586 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Total Controller Updates: 81
+============================================================
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 29.240 s
+Interval            : 1.000 s
+Interval Packets    : 9816
+Interval ECN Marks  : 175
+Interval ECN Ratio  : 0.01782804
+Alpha               : 1.00000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.133460 s
+BDP                 : 834128 bytes
+Old CWND            : 93755 bytes
+ECN Ratio           : 0.01782804
+Reduction Factor    : 0.98217196
+Increase Bytes      : 0.00
+Formula CWND        : 92083 bytes
+Final CWND          : 92083 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.133223 s
+BDP                 : 832644 bytes
+Old CWND            : 93569 bytes
+ECN Ratio           : 0.01782804
+Reduction Factor    : 0.98217196
+Increase Bytes      : 0.00
+Formula CWND        : 91900 bytes
+Final CWND          : 91900 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.141230 s
+BDP                 : 882689 bytes
+Old CWND            : 93586 bytes
+ECN Ratio           : 0.01782804
+Reduction Factor    : 0.98217196
+Increase Bytes      : 0.00
+Formula CWND        : 91917 bytes
+Final CWND          : 91917 bytes
+Action              : ECN -> PROPORTIONAL REDUCTION
+------------------------------------------------------------
+Total Controller Updates: 84
+============================================================
+
+============================================================
+                     FLOW RESULTS
+============================================================
+
+---------------- FLOW 1 ----------------
+Source              : 10.0.1.1
+Destination         : 10.0.6.2
+Protocol            : 6
+TX Packets          : 26122
+RX Packets          : 26000
+Lost Packets        : 122
+Packet Loss         : 0.4670 %
+TX Bytes            : 15352780
+RX Bytes            : 15281044
+Throughput          : 4.2172 Mbps
+Mean Delay          : 65.8777 ms
+Mean Jitter         : 0.1270 ms
+Measured Duration   : 28.9883 s
+------------------------------------------
+
+---------------- FLOW 2 ----------------
+Source              : 10.0.2.1
+Destination         : 10.0.6.2
+Protocol            : 6
+TX Packets          : 24708
+RX Packets          : 24553
+Lost Packets        : 77
+Packet Loss         : 0.3116 %
+TX Bytes            : 14524524
+RX Bytes            : 14433384
+Throughput          : 3.9871 Mbps
+Mean Delay          : 65.8680 ms
+Mean Jitter         : 0.1227 ms
+Measured Duration   : 28.9601 s
+------------------------------------------
+
+---------------- FLOW 3 ----------------
+Source              : 10.0.3.1
+Destination         : 10.0.7.2
+Protocol            : 6
+TX Packets          : 26182
+RX Packets          : 25953
+Lost Packets        : 81
+Packet Loss         : 0.3094 %
+TX Bytes            : 15390380
+RX Bytes            : 15255728
+Throughput          : 4.2086 Mbps
+Mean Delay          : 65.9190 ms
+Mean Jitter         : 0.1243 ms
+Measured Duration   : 28.9994 s
+------------------------------------------
+
+---------------- FLOW 4 ----------------
+Source              : 10.0.4.1
+Destination         : 10.0.7.2
+Protocol            : 17
+TX Packets          : 62748
+RX Packets          : 61841
+Lost Packets        : 747
+Packet Loss         : 1.1905 %
+TX Bytes            : 64504944
+RX Bytes            : 63572548
+Throughput          : 17.5376 Mbps
+Mean Delay          : 64.0583 ms
+Mean Jitter         : 0.0870 ms
+Measured Duration   : 28.9995 s
+------------------------------------------
+
+---------------- FLOW 5 ----------------
+Source              : 10.0.4.1
+Destination         : 10.0.6.2
+Protocol            : 17
+TX Packets          : 51622
+RX Packets          : 50711
+Lost Packets        : 759
+Packet Loss         : 1.4703 %
+TX Bytes            : 53067416
+RX Bytes            : 52130908
+Throughput          : 14.3813 Mbps
+Mean Delay          : 63.8804 ms
+Mean Jitter         : 0.0887 ms
+Measured Duration   : 28.9993 s
+------------------------------------------
+
+---------------- FLOW 6 ----------------
+Source              : 10.0.6.2
+Destination         : 10.0.1.1
+Protocol            : 6
+TX Packets          : 13626
+RX Packets          : 13460
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 719892
+RX Bytes            : 709988
+Throughput          : 0.1969 Mbps
+Mean Delay          : 60.0136 ms
+Mean Jitter         : 0.0000 ms
+Measured Duration   : 28.8467 s
+------------------------------------------
+
+---------------- FLOW 7 ----------------
+Source              : 10.0.6.2
+Destination         : 10.0.2.1
+Protocol            : 6
+TX Packets          : 12573
+RX Packets          : 12527
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 659008
+RX Bytes            : 656616
+Throughput          : 0.1815 Mbps
+Mean Delay          : 60.0135 ms
+Mean Jitter         : 0.0000 ms
+Measured Duration   : 28.9397 s
+------------------------------------------
+
+---------------- FLOW 8 ----------------
+Source              : 10.0.7.2
+Destination         : 10.0.3.1
+Protocol            : 6
+TX Packets          : 13334
+RX Packets          : 13323
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 699076
+RX Bytes            : 698504
+Throughput          : 0.1933 Mbps
+Mean Delay          : 60.0135 ms
+Mean Jitter         : 0.0000 ms
+Measured Duration   : 28.9141 s
+------------------------------------------
+
+============================================================
+                     FINAL RESULTS
+============================================================
+Total Packets       : 229078
+ECN Marked Packets  : 1092
+ECN Ratio            : 0.00476694
+ECN Percentage       : 0.4767 %
+ECN ACK Count        : 139
+Last ECN ACK Time    : 29.8932 s
+Controller Updates   : 84
+Last Old CWND        : 93586 bytes
+Last Formula CWND    : 91917 bytes
+Last Final CWND      : 91917 bytes
+Average TCP Throughput: 4.1376 Mbps
+Aggregate TCP Throughput: 12.4128 Mbps
+Average TCP Delay    : 65.8882 ms
+Aggregate TCP Loss   : 0.3636 %
+============================================================

@@ -1,27 +1,26 @@
 #include "ecn-monitor.h"
 #include "ns3/core-module.h"
-#include <iomanip>
-#include <iostream>
 
 using namespace ns3;
 using namespace std;
 
 namespace ecn
 {
+
 namespace
 {
-uint64_t g_totalPackets = 0;
-uint64_t g_ecnMarkedPackets = 0;
-uint64_t g_ecnAckCount = 0;
-double g_lastEcnAckTime = 0.0;
+uint64_t g_totalPackets=0;
+uint64_t g_ecnMarkedPackets=0;
+uint64_t g_ecnAckCount=0;
+double g_lastEcnAckTime=0.0;
 }
 
 void EcnMonitor::Reset()
 {
-    g_totalPackets = 0;
-    g_ecnMarkedPackets = 0;
-    g_ecnAckCount = 0;
-    g_lastEcnAckTime = 0.0;
+    g_totalPackets=0;
+    g_ecnMarkedPackets=0;
+    g_ecnAckCount=0;
+    g_lastEcnAckTime=0.0;
 }
 
 void EcnMonitor::OnEnqueue(Ptr<const QueueDiscItem> item)
@@ -30,31 +29,21 @@ void EcnMonitor::OnEnqueue(Ptr<const QueueDiscItem> item)
     ++g_totalPackets;
 }
 
-void EcnMonitor::OnMark(Ptr<const QueueDiscItem> item, const char* reason)
+void EcnMonitor::OnMark(Ptr<const QueueDiscItem> item,const char* reason)
 {
     (void)item;
+    (void)reason;
     ++g_ecnMarkedPackets;
-
-    cout << "[ECN MARK] "
-         << "time=" << fixed << setprecision(6)
-         << Simulator::Now().GetSeconds()
-         << " s"
-         << " | total=" << g_totalPackets
-         << " | marked=" << g_ecnMarkedPackets
-         << " | cumulativeRatio=" << setprecision(8)
-         << GetCumulativeRatio()
-         << " | reason=" << reason
-         << "\n";
 }
 
 double EcnMonitor::GetCumulativeRatio()
 {
-    if (g_totalPackets == 0)
+    if(g_totalPackets==0)
     {
         return 0.0;
     }
 
-    return static_cast<double>(g_ecnMarkedPackets) / static_cast<double>(g_totalPackets);
+    return static_cast<double>(g_ecnMarkedPackets)/static_cast<double>(g_totalPackets);
 }
 
 double EcnMonitor::GetRatio()
@@ -75,7 +64,18 @@ uint64_t EcnMonitor::GetMarkedPackets()
 void EcnMonitor::RecordEcnAck(double timeSeconds)
 {
     ++g_ecnAckCount;
-    g_lastEcnAckTime = timeSeconds;
+    g_lastEcnAckTime=timeSeconds;
+}
+
+void EcnMonitor::RecordEcnFeedback(TcpSocketState::EcnState_t oldState,
+                                   TcpSocketState::EcnState_t newState,
+                                   double timeSeconds)
+{
+    if (newState == TcpSocketState::ECN_ECE_RCVD &&
+        oldState != TcpSocketState::ECN_ECE_RCVD)
+    {
+        RecordEcnAck(timeSeconds);
+    }
 }
 
 uint64_t EcnMonitor::GetEcnAckCount()
@@ -87,4 +87,5 @@ double EcnMonitor::GetLastEcnAckTime()
 {
     return g_lastEcnAckTime;
 }
+
 }

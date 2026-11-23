@@ -2,6 +2,7 @@
 #define ECN_MONITOR_H
 
 #include "ns3/queue-disc.h"
+#include "ns3/tcp-socket-state.h"
 #include <cstdint>
 
 namespace ecn
@@ -19,6 +20,9 @@ public:
     static void RecordEcnAck(double timeSeconds);
     static uint64_t GetEcnAckCount();
     static double GetLastEcnAckTime();
+    static void RecordEcnFeedback(ns3::TcpSocketState::EcnState_t oldState,
+                                  ns3::TcpSocketState::EcnState_t newState,
+                                  double timeSeconds);
 };
 }
 

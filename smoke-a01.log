@@ -1,0 +1,233 @@
+[V3] Queue Enqueue Trace: CONNECTED
+[V3] Queue Mark Trace: CONNECTED
+
+============================================================
+          INTELLIGENT ECN CONGESTION CONTROLLER V3
+============================================================
+Topology             : 3 TCP + 2 VBR
+TCP Flows            : 3
+VBR Flows            : 2
+Controller           : ECN + BDP
+TCP Base             : NewReno
+ECN                  : ENABLED
+Queue Management     : RED + ECN
+TCP -> Router        : 1Gbps / 5ms
+VBR -> Router        : 100Mbps / 5ms
+Shared Bottleneck    : 50Mbps / 50ms
+Router -> Receiver   : 100Mbps / 5ms
+RED MinTh            : 1 packets
+RED MaxTh            : 3 packets
+Queue Size           : 10 packets
+Alpha                : 0.1
+Packet Count         : 200 per TCP flow
+Packet Size          : 1000 bytes
+VBR Rate Range       : 1 - 2 Mbps
+Simulation Time      : 3 seconds
+Controller Interval  : 1.000 second
+============================================================
+ECN Response         : CWND reduction based on ECN ratio
+No-ECN Response      : RTT-normalized CWND increase
+BDP Constraint       : CWND <= BDP
+============================================================
+[VBR] time=1.00 s | rate=1Mbps
+[VBR] time=1.00 s | rate=1Mbps
+[V3] Flow 1 registered at 1.240193 s | Initial CWND=5360 bytes
+[V3] Flow 2 registered at 1.240390 s | Initial CWND=5360 bytes
+[V3] Flow 3 registered at 1.240777 s | Initial CWND=5360 bytes
+
+============================================================
+                 V3 CONTROLLER INTERVAL
+============================================================
+Time               : 2.240 s
+Interval            : 1.000 s
+Interval Packets    : 637
+Interval ECN Marks  : 0
+Interval ECN Ratio  : 0.00000000
+Alpha               : 0.10000000
+------------------------------------------------------------
+Flow ID             : 1
+RTT                 : 0.120286 s
+BDP                 : 751789 bytes
+Old CWND            : 5360 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4456.04
+Formula CWND        : 9817 bytes
+Final CWND          : 9817 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 2
+RTT                 : 0.120359 s
+BDP                 : 752242 bytes
+Old CWND            : 5360 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4453.35
+Formula CWND        : 9814 bytes
+Final CWND          : 9814 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Flow ID             : 3
+RTT                 : 0.120411 s
+BDP                 : 752566 bytes
+Old CWND            : 5360 bytes
+ECN Ratio           : 0.00000000
+Reduction Factor    : 1.00000000
+Increase Bytes      : 4451.44
+Formula CWND        : 9812 bytes
+Final CWND          : 9812 bytes
+Action              : NO ECN -> RTT-NORMALIZED INCREASE
+------------------------------------------------------------
+Total Controller Updates: 3
+============================================================
+
+============================================================
+                     FLOW RESULTS
+============================================================
+
+---------------- FLOW 1 ----------------
+Source              : 10.0.1.1
+Destination         : 10.0.6.2
+Protocol            : 6
+TX Packets          : 209
+RX Packets          : 209
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 121824
+RX Bytes            : 121824
+Throughput          : 0.4900 Mbps
+Mean Delay          : 60.3483 ms
+Mean Jitter         : 0.1272 ms
+Measured Duration   : 1.9888 s
+------------------------------------------
+
+---------------- FLOW 2 ----------------
+Source              : 10.0.2.1
+Destination         : 10.0.6.2
+Protocol            : 6
+TX Packets          : 209
+RX Packets          : 209
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 121824
+RX Bytes            : 121824
+Throughput          : 0.4900 Mbps
+Mean Delay          : 60.4099 ms
+Mean Jitter         : 0.1330 ms
+Measured Duration   : 1.9892 s
+------------------------------------------
+
+---------------- FLOW 3 ----------------
+Source              : 10.0.3.1
+Destination         : 10.0.7.2
+Protocol            : 6
+TX Packets          : 209
+RX Packets          : 209
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 121824
+RX Bytes            : 121824
+Throughput          : 0.4899 Mbps
+Mean Delay          : 60.4662 ms
+Mean Jitter         : 0.1388 ms
+Measured Duration   : 1.9893 s
+------------------------------------------
+
+---------------- FLOW 4 ----------------
+Source              : 10.0.4.1
+Destination         : 10.0.6.2
+Protocol            : 17
+TX Packets          : 249
+RX Packets          : 242
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 255972
+RX Bytes            : 248776
+Throughput          : 1.0009 Mbps
+Mean Delay          : 60.3410 ms
+Mean Jitter         : 0.0229 ms
+Measured Duration   : 1.9883 s
+------------------------------------------
+
+---------------- FLOW 5 ----------------
+Source              : 10.0.4.1
+Destination         : 10.0.7.2
+Protocol            : 17
+TX Packets          : 249
+RX Packets          : 242
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 255972
+RX Bytes            : 248776
+Throughput          : 1.0009 Mbps
+Mean Delay          : 60.5089 ms
+Mean Jitter         : 0.0292 ms
+Measured Duration   : 1.9885 s
+------------------------------------------
+
+---------------- FLOW 6 ----------------
+Source              : 10.0.6.2
+Destination         : 10.0.1.1
+Protocol            : 6
+TX Packets          : 105
+RX Packets          : 96
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 5464
+RX Bytes            : 4996
+Throughput          : 0.0214 Mbps
+Mean Delay          : 60.0134 ms
+Mean Jitter         : 0.0000 ms
+Measured Duration   : 1.8682 s
+------------------------------------------
+
+---------------- FLOW 7 ----------------
+Source              : 10.0.6.2
+Destination         : 10.0.2.1
+Protocol            : 6
+TX Packets          : 105
+RX Packets          : 96
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 5464
+RX Bytes            : 4996
+Throughput          : 0.0214 Mbps
+Mean Delay          : 60.0134 ms
+Mean Jitter         : 0.0000 ms
+Measured Duration   : 1.8689 s
+------------------------------------------
+
+---------------- FLOW 8 ----------------
+Source              : 10.0.7.2
+Destination         : 10.0.3.1
+Protocol            : 6
+TX Packets          : 105
+RX Packets          : 96
+Lost Packets        : 0
+Packet Loss         : 0.0000 %
+TX Bytes            : 5464
+RX Bytes            : 4996
+Throughput          : 0.0214 Mbps
+Mean Delay          : 60.0134 ms
+Mean Jitter         : 0.0000 ms
+Measured Duration   : 1.8691 s
+------------------------------------------
+
+============================================================
+                     FINAL RESULTS
+============================================================
+Total Packets       : 1440
+ECN Marked Packets  : 0
+ECN Ratio            : 0.00000000
+ECN Percentage       : 0.0000 %
+ECN ACK Count        : 0
+Last ECN ACK Time    : 0.0000 s
+Controller Updates   : 3
+Last Old CWND        : 5360 bytes
+Last Formula CWND    : 9812 bytes
+Last Final CWND      : 9812 bytes
+Average TCP Throughput: 0.4900 Mbps
+Aggregate TCP Throughput: 1.4699 Mbps
+Average TCP Delay    : 60.4081 ms
+Aggregate TCP Loss   : 0.0000 %
+============================================================

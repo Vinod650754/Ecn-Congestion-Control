@@ -1,0 +1,11 @@
+metric,value
+alpha,1
+queue_enqueued_packets,222268
+queue_marked_packets,412
+queue_ecn_ratio,0.00185362
+ecn_feedback_events,223
+controller_updates,84
+average_tcp_throughput_mbps,3.8169
+aggregate_tcp_throughput_mbps,11.4507
+average_tcp_delay_ms,67.5922
+aggregate_tcp_loss_percent,0

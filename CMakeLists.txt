@@ -37,7 +37,7 @@ build_exec(
         ${libmobility}
         ${libnetanim}
     EXECUTABLE_DIRECTORY_PATH
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/scratch/ECN-Conjestion-Control_FINAL/
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/scratch/ecn-final/
 )
 
 build_exec(
@@ -54,5 +54,5 @@ build_exec(
         ${libmobility}
         ${libnetanim}
     EXECUTABLE_DIRECTORY_PATH
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/scratch/ECN-Conjestion-Control_FINAL/
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/scratch/ecn-final/
 )

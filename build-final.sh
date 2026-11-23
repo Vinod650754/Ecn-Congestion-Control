@@ -1,33 +1,42 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
-if [ -z "$1" ]; then
-  echo "Usage: ./build-final.sh /path/to/ns-3.42"
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 /path/to/ns-3.42" >&2
   exit 1
 fi
 
 NS3_DIR="$(cd "$1" && pwd)"
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TARGET="$NS3_DIR/scratch/ecn-final-modules"
+OUTPUT="$PROJECT_DIR/ecn-final-bin"
 
-echo "Installing final modular ECN project into:"
-echo "$NS3_DIR"
+includes=(
+  "-I$NS3_DIR/build/include"
+  "-I$NS3_DIR/src"
+  "-I$PROJECT_DIR/modules/traffic-generator"
+  "-I$PROJECT_DIR/modules/vbr-generator"
+  "-I$PROJECT_DIR/modules/ecn-monitor"
+  "-I$PROJECT_DIR/modules/ecn-controller"
+  "-I$PROJECT_DIR/modules/bdp-monitor"
+  "-I$PROJECT_DIR/modules/bdp-controller"
+)
 
-rm -rf "$TARGET"
-mkdir -p "$TARGET"
+sources=(
+  "$PROJECT_DIR/modules/traffic-generator/traffic-generator.cc"
+  "$PROJECT_DIR/modules/vbr-generator/vbr-generator.cc"
+  "$PROJECT_DIR/modules/ecn-monitor/ecn-monitor.cc"
+  "$PROJECT_DIR/modules/ecn-controller/ecn-controller.cc"
+  "$PROJECT_DIR/modules/bdp-monitor/bdp-monitor.cc"
+  "$PROJECT_DIR/modules/bdp-controller/bdp-controller.cc"
+  "$PROJECT_DIR/simulation/main.cc"
+)
 
-cp -R "$PROJECT_DIR/modules/." "$TARGET/"
+mapfile -t libraries < <(find "$NS3_DIR/build/lib" -maxdepth 1 -name 'libns3.42-*.so' -print)
+if [ "${#libraries[@]}" -eq 0 ]; then
+  echo "No ns-3.42 shared libraries found; build ns-3.42 first." >&2
+  exit 1
+fi
 
-# Copy the integration source as the scratch program.
-cp "$PROJECT_DIR/simulation/main.cc" "$NS3_DIR/scratch/ecn-final.cc"
-
-echo
-echo "Building ns-3..."
-cd "$NS3_DIR"
-./ns3 build
-
-echo
-echo "Build completed."
-echo
-echo "Run:"
-echo './ns3 run "scratch/ecn-final.cc --packetCount=100000 --simulationTime=30 --alpha=1.0"'
+g++ -std=c++20 "${includes[@]}" "${sources[@]}" -o "$OUTPUT" \
+  "${libraries[@]}" "-Wl,-rpath,$NS3_DIR/build/lib"
+echo "Built $OUTPUT without modifying $NS3_DIR"

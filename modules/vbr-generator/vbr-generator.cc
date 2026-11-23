@@ -30,7 +30,7 @@ void VbrGenerator::ScheduleRateChanges(Ptr<OnOffApplication> application, double
 
     while (currentTime < stopTime)
     {
-        double nextTime = min(currentTime + 1.0, stopTime);
+        double nextTime = min(currentTime + 5.0, stopTime);
         uint32_t rateMbps = random->GetInteger(g_minRateMbps, g_maxRateMbps);
 
         Simulator::Schedule(Seconds(currentTime), [application, rateMbps]()
