@@ -1,90 +1,15 @@
-# Intelligent ECN Congestion Controller
+# Intelligent ECN Congestion Controller (ns-3.42)
 
-A modular ns-3 implementation of an ECN-driven congestion controller with a BDP-aware congestion-window constraint.
+An Explicit Congestion Notification (ECN) and Bandwidth-Delay Product (BDP) aware TCP congestion control module (`ns3::EcnController`) implemented and evaluated in **ns-3.42** against standard baselines (`TcpNewReno`, `CUBIC`, `DCTCP`, and `BBR`).
 
-## Final architecture
+## Key Components
+- **`ecn-controller.cc / .h`**: Interval-based congestion window controller using ECN marking ratio feedback (`CWND_new = CWND * (1 - alpha * r_ECN)`), RTT-normalized additive probing during uncongested intervals, and cross-traffic-aware fair-share BDP clamping.
+- **`bdp-monitor.cc / .h` & `bdp-controller.cc / .h`**: Minimum-RTT propagation tracking and upper-bound BDP enforcement to prevent bufferbloat.
+- **`ecn-monitor.cc / .h`**: Router RED queue enqueue/mark telemetry and TCP ECN state tracking.
+- **`traffic-generator.cc / .h` & `vbr-generator.cc / .h`**: Multi-flow bottleneck workload generator combining 3 bulk TCP senders and 2 Variable Bit Rate (VBR) UDP cross-traffic flows.
 
-- `traffic-generator` — installs TCP BulkSend and PacketSink applications.
-- `ecn-monitor` — counts queue-wide enqueues, successful ECN marks, ECN-ECE feedback events, and computes the mark ratio.
-- `ecn-controller` — extends TCP NewReno and applies the proportional ECN-based CWND formula.
-- `bdp-monitor` — measures RTT and computes BDP from bottleneck bandwidth and RTT.
-- `bdp-controller` — constrains the ECN-derived CWND using the estimated BDP.
-- `simulation/main.cc` — integrates the modules, builds the topology, installs RED+ECN, NetAnim, FlowMonitor, and outputs.
+## Running a Simulation
+Place this directory inside `ns-3.42/scratch/ecn-final/` and run:
 
-## Controller
-
-ECN response, evaluated once per controller interval:
-
-`CWND_new = CWND_old * (1 - Alpha * ECN_Ratio)`
-
-BDP:
-
-`BDP = Bottleneck Bandwidth * RTT`
-
-Final controller:
-
-`Final CWND = min(Formula CWND, BDP)`
-
-## Default experiment
-
-- TCP: NewReno
-- ECN: enabled
-- Queue: RED + ECN
-- Sender -> Router: 1 Gbps / 5 ms
-- Router -> Receiver: 5 Mbps / 50 ms
-- RED MinTh: 1 packet
-- RED MaxTh: 3 packets
-- Queue: 100 packets
-- Packet count: 100000
-- Packet size: 1000 bytes
-- Simulation time: 30 seconds
-- Alpha: 1.0
-
-The RED thresholds are command-line parameters so they can be changed later without editing the source.
-
-## Building without modifying ns-3
-
-The original helper copied files into the ns-3 source tree. That is intentionally no
-longer done. Build the existing ns-3.42 tree first, then compile the project in place:
-
-```bash
-cd ~/ns-allinone-3.42/ns-3.42
-./ns3 build
-cd scratch/ecn-final
-./build-final.sh ~/ns-allinone-3.42/ns-3.42
-```
-
-This uses the generated ns-3 shared libraries and does not change files outside
-`scratch/ecn-final`. It produces `ecn-final-bin` in this directory.
-
-Run a short experiment:
-
-```bash
-./ecn-final-bin --packetCount=1000 --simulationTime=10 --alpha=1.0 \
-  --vbrMinRate=20 --vbrMaxRate=30 --outputPrefix=run-a10
-```
-
-Outputs are written in the current directory:
-
-- `run-a10-timeseries.csv` — one row per controller update and TCP flow.
-- `run-a10-results.csv` — aggregate measured metrics.
-- `run-a10-flowmon.xml` — detailed FlowMonitor data.
-
-`queue_enqueued_packets` and `queue_marked_packets` are queue-disc trace
-counts across every installed queue disc. `queue_ecn_ratio` is marked/enqueued,
-not a ratio of TCP ACKs. `ecn_feedback_events` counts transitions into
-`ECN_ECE_RCVD`, so it measures sender-side ECN feedback rather than inferred
-marks. Throughput uses each flow's measured first-TX to last-RX duration.
-
-## Changing RED thresholds
-
-For example:
-
-```bash
-./ecn-final-bin --redMinTh=20 --redMaxTh=50 --queueSize=100 \
-  --outputPrefix=run-thresholds
-```
-
-The default values remain the reference configuration. The output prefix can
-be changed with `--outputPrefix`; all existing experiment options remain
-available.
+    ./ns3 build
+    ./ns3 run "ecn-final --tcpAlgo=EcnController --bottleneckRate=50Mbps --bottleneckDelay=55ms --alpha=0.8"
